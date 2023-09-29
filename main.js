@@ -29,6 +29,7 @@ let joinAndDisplayLocalStream = async () => {
 
 let joinStream = async () => {
     await joinAndDisplayLocalStream()
+    document.getElementById('set-btn').style.display = 'none'
     document.getElementById('join-btn').style.display = 'none'
     document.getElementById('stream-controls').style.display = 'flex'
 }
@@ -68,36 +69,85 @@ let leaveAndRemoveLocalStream = async () => {
     }
 
     await client.leave()
+    document.getElementById('set-btn').style.display = 'block'
+    document.getElementById('item1').checked = false; 
+    document.getElementById('item2').checked = false;
+    document.getElementById('item3').checked = false; 
     document.getElementById('join-btn').style.display = 'block'
     document.getElementById('stream-controls').style.display = 'none'
     document.getElementById('video-streams').innerHTML = ''
 }
 
-let toggleMic = async (e) => {
-    if (localTracks[0].muted){
-        await localTracks[0].setMuted(false)
-        e.target.innerText = 'Mic on'
-        e.target.style.backgroundColor = 'cadetblue'
+// let toggleMic = async (e) => {
+//     if (localTracks[0].muted){
+//         await localTracks[0].setMuted(false)
+//         e.target.innerText = 'Mic on'
+//         e.target.style.backgroundColor = 'cadetblue'
+//     }else{
+//         await localTracks[0].setMuted(true)
+//         e.target.innerText = 'Mic off'
+//         e.target.style.backgroundColor = '#EE4B2B'
+//     }
+// }
+
+let toggleMic = async (e = null) => {
+    if(localTracks[0].muted){
+        await localTracks[0].setMuted(false);
+        if (e) {
+            e.target.innerText = 'Mic on';
+            e.target.style.backgroundColor = 'cadetblue';
+        }
     }else{
-        await localTracks[0].setMuted(true)
-        e.target.innerText = 'Mic off'
-        e.target.style.backgroundColor = '#EE4B2B'
+        await localTracks[0].setMuted(true);
+        if (e) {
+            e.target.innerText = 'Mic off';
+            e.target.style.backgroundColor = '#EE4B2B';
+        }
     }
 }
 
-let toggleCamera = async (e) => {
+let toggleCamera = async (e = null) => {
     if(localTracks[1].muted){
         await localTracks[1].setMuted(false)
-        e.target.innerText = 'Camera on'
-        e.target.style.backgroundColor = 'cadetblue'
+        if (e) {
+            e.target.innerText = 'Camera on'
+            e.target.style.backgroundColor = 'cadetblue'
+        }
     }else{
         await localTracks[1].setMuted(true)
-        e.target.innerText = 'Camera off'
-        e.target.style.backgroundColor = '#EE4B2B'
+        if (e) {
+            e.target.innerText = 'Camera off'
+            e.target.style.backgroundColor = '#EE4B2B'
+        }
     }
 }
 
-document.getElementById('join-btn').addEventListener('click', joinStream)
+document.getElementById('join-btn').addEventListener('click', async function() {
+    // Check the status of checkboxes
+    let isMicOn = document.getElementById('item1').checked;
+    let isVolumeOn = document.getElementById('item2').checked;
+    let isCommentsOn = document.getElementById('item3').checked;
+
+    await joinStream()
+
+    // // Configure the video conference based on the checkbox selections
+    if (!isMicOn) {
+        await toggleMic()
+        document.getElementById('mic-btn').innerText = 'Mic off';
+        document.getElementById('mic-btn').style.backgroundColor = '#EE4B2B';
+    }
+    if (!isVolumeOn) {
+        await toggleCamera()
+        document.getElementById('camera-btn').innerText = 'Camera off'
+        document.getElementById('camera-btn').style.backgroundColor = '#EE4B2B'
+    }
+    // if (isCommentsOn) {
+        
+    // }
+});
+
+
+// document.getElementById('join-btn').addEventListener('click', joinStream)
 document.getElementById('leave-btn').addEventListener('click', leaveAndRemoveLocalStream)
 document.getElementById('mic-btn').addEventListener('click', toggleMic)
 document.getElementById('camera-btn').addEventListener('click', toggleCamera)

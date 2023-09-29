@@ -1,12 +1,18 @@
-body{
+/* body{
     background:#0F2027;
     background:-webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027) ;
     background: linear-gradient(to right, #2C5364, #203A43, #0F2027);
+} */
+
+body {
+    background: #ECEFF1;
+    background: -webkit-linear-gradient(to right, #CFD8DC, #ECEFF1, #B0BEC5);
+    background: linear-gradient(to right, #CFD8DC, #ECEFF1, #B0BEC5);
 }
 
 #join-btn{
     position: fixed;
-    top:50%;
+    top:57%;
     left:50%;
     margin-top:-50px;
     margin-left:-100px;
@@ -47,6 +53,36 @@ button{
     display: none;
     justify-content: center;
     margin-top:0.5em;
+}
+
+.checkbox-item {
+    color: cadetblue;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size:18px;
+    font-weight: bold;
+}
+
+#mic {
+    position: fixed;
+    top:30%;
+    left:43%;
+}
+
+#cam {
+    position: fixed;
+    top:37%;
+    left:43%;
+}
+
+#com {
+    position: fixed;
+    top:44%;
+    left:43%;
+}
+
+.checkbox-item input[type="checkbox"]:checked + label {
+    color: #FFA500;  /* Change the color to whatever you prefer */
 }
 
 @media screen and (max-width:1400px){
