@@ -1,11 +1,39 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Group 10 Project</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <!-- Add WYSIWYG package -->
+    <script src="https://cdn.tiny.cloud/1/iou5a9nf8iwyr0m36wgd0ohiwnnewr65yn0dw2x1e5bdh70m/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '.editor',
+            height: 100,
+            menubar: false,
+            toolbar: 'bold italic underline',
+            init_instance_callback: function (editor) {
+                editor.on('focus', function () {
+                    if (editor.getContent() === '<p>Comments?</p>') {
+                        editor.setContent('');
+                    }
+                });
+                editor.setContent('<p>Comments?</p>');
+                // editor.save();
+                document.getElementById('send-comment-btn').addEventListener('click', function () {
+                    let commentContent = editor.getContent();
+                    let commentDiv = document.createElement('div');
+                    commentDiv.innerHTML = commentContent;
+                    document.getElementById('comments-display-area').appendChild(commentDiv);
+                    editor.setContent('<p>Comments?</p>');
+                });
+            }
+        });
+    </script>
 </head>
 <body>
     <div id="set-btn">
@@ -32,9 +60,13 @@
             <button id="leave-btn">Leave Stream</button>
             <button id="mic-btn">Mic On</button>
             <button id="camera-btn">Camera on</button>
+            <div>
+                <textarea class="editor" name="editor"></textarea>
+            </div>
+            <button id="send-comment-btn">Send Comment</button>
+            <div id="comments-display-area"></div>
         </div>
     </div>
-    
 </body>
 <!-- <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script> -->
 <script src="AgoraRTC_N-4.7.3.js"></script>
