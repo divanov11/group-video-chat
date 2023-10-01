@@ -78,18 +78,6 @@ let leaveAndRemoveLocalStream = async () => {
     document.getElementById('video-streams').innerHTML = ''
 }
 
-// let toggleMic = async (e) => {
-//     if (localTracks[0].muted){
-//         await localTracks[0].setMuted(false)
-//         e.target.innerText = 'Mic on'
-//         e.target.style.backgroundColor = 'cadetblue'
-//     }else{
-//         await localTracks[0].setMuted(true)
-//         e.target.innerText = 'Mic off'
-//         e.target.style.backgroundColor = '#EE4B2B'
-//     }
-// }
-
 let toggleMic = async (e = null) => {
     if(localTracks[0].muted){
         await localTracks[0].setMuted(false);
@@ -122,6 +110,50 @@ let toggleCamera = async (e = null) => {
     }
 }
 
+let screenTrack;
+
+async function startScreenSharing() {
+    try {
+        screenTrack = await AgoraRTC.createScreenVideoTrack();
+        await client.unpublish(localTracks[1])
+        await client.publish(screenTrack);
+        console.log('Screen sharing started');
+        document.getElementById('screen-share').innerHTML = '<button id="stop-share">Stop Share</button>'
+        document.getElementById('stop-share').style.backgroundColor = '#EE4B2B'
+        document.getElementById('stop-share').addEventListener('click', stopScreenSharing)
+    } catch (error) {
+        console.error("Failed to share the screen", error);
+    }
+}
+
+async function stopScreenSharing() {
+    if (screenTrack) {
+        await client.unpublish(screenTrack);
+        await client.publish(localTracks[1])
+        console.log(localTracks[1])
+        screenTrack.close();
+        screenTrack = null;
+        console.log('Screen sharing stopped');
+        document.getElementById('screen-share').innerHTML = '<button id="start-share">Start Share</button>'
+        document.getElementById('start-share').style.backgroundColor = 'cadetblue'
+    }
+}
+
+let record = false
+function toggleRecord() {
+    if (record) {
+        alert('RECORDING OVER!')
+        document.getElementById('record-btn').innerText = 'Record On'
+        document.getElementById('record-btn').style.backgroundColor = 'cadetblue'
+        record =false
+    }else{
+        alert('START RECORDING!')
+        document.getElementById('record-btn').innerText = 'Record Off'
+        document.getElementById('record-btn').style.backgroundColor = '#EE4B2B'
+        record =true
+    }
+}
+
 document.getElementById('join-btn').addEventListener('click', async function() {
     // Check the status of checkboxes
     let isMicOn = document.getElementById('item1').checked;
@@ -150,3 +182,10 @@ document.getElementById('join-btn').addEventListener('click', async function() {
 document.getElementById('leave-btn').addEventListener('click', leaveAndRemoveLocalStream)
 document.getElementById('mic-btn').addEventListener('click', toggleMic)
 document.getElementById('camera-btn').addEventListener('click', toggleCamera)
+if (document.getElementById('start-share')) {
+    document.getElementById('start-share').addEventListener('click', startScreenSharing)
+}
+if (document.getElementById('stop-share')) {
+    document.getElementById('stop-share').addEventListener('click', stopScreenSharing)
+}
+document.getElementById('record-btn').addEventListener('click', toggleRecord)
