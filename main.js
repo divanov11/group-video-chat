@@ -146,7 +146,6 @@ document.getElementById('join-btn').addEventListener('click', async function() {
     // }
 });
 
-
 // document.getElementById('join-btn').addEventListener('click', joinStream)
 document.getElementById('leave-btn').addEventListener('click', leaveAndRemoveLocalStream)
 document.getElementById('mic-btn').addEventListener('click', toggleMic)

@@ -85,6 +85,32 @@ button{
     color: #FFA500;  /* Change the color to whatever you prefer */
 }
 
+#send-comment-btn {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    background-color: cadetblue;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#comments-display-area {
+    width: 50%;
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    overflow-y: auto;
+    max-height: 200px;  /* Adjust as needed */
+}
+
+#comments-display-area div {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
 @media screen and (max-width:1400px){
     #video-streams{
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
